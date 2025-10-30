@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gabe Fitness</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+  </head>
+  <body>
+    <header>
+      <h1 id="appTitle">Gabe Fitness</h1>
+      <p class="tagline">Powered by Capstone — Built for Progress</p>
+    </header>
+
+    <main id="app">
+      <button id="startWorkout">🏋️ Start Workout</button>
+      <button id="logMeal">🍎 Log Meal</button>
+      <button id="trackHydration">💧 Hydration</button>
+      <button id="showProgress">📈 Progress Dashboard</button>
+
+      <div id="timerContainer" class="hidden">
+        <h3>⏱ Rest Timer</h3>
+        <div id="timerDisplay">00:00</div>
+        <button id="stopTimer">Stop Timer</button>
+      </div>
+
+      <div id="hydrationContainer">
+        <h3>💧 Daily Hydration</h3>
+        <div id="waterBarContainer">
+          <div id="waterBar"></div>
+        </div>
+        <p id="waterText">0 / 8 cups</p>
+        <button id="addWater">Add Cup</button>
+      </div>
+    </main>
+
+    <footer>©2025 Capstone Home Inspections</footer>
+    <script src="script.js"></script>
+  </body>
+</html>
