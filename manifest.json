@@ -1,12 +1,20 @@
 {
-  "name": "Gabe Fitness",
-  "short_name": "GabeFitness",
+  "name": "Gabe Fitness by Capstone",
+  "short_name": "Gabe Fitness",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#22266a",
-  "theme_color": "#eaa92e",
+  "theme_color": "#22266a",
   "icons": [
-    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png" }
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
   ]
 }
