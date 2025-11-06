@@ -2,19 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gabe Fitness by Capstone</title>
     <meta name="theme-color" content="#22266a" />
     <link rel="manifest" href="manifest.json" />
-    <link rel="icon" href="favicon.ico" sizes="any" />
+    <link rel="icon" href="favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="icons/icon-192.png" />
     <link rel="stylesheet" href="styles.css" />
   </head>
+
   <body class="dark">
-    <!-- Splash Screen -->
+    <!-- 🌅 SPLASH -->
     <div id="splash">
       <img src="icons/icon-192.png" alt="Capstone Icon" class="splash-icon" />
       <h1 class="splash-title">Gabe Fitness by Capstone</h1>
@@ -24,7 +22,7 @@
       <p class="splash-loading">Cargando…</p>
     </div>
 
-    <!-- HEADER -->
+    <!-- 🧭 HEADER -->
     <header class="app-header">
       <div class="brand-left">
         <img src="icons/icon-192.png" alt="Capstone Icon" class="brand-icon" />
@@ -38,7 +36,7 @@
       </button>
     </header>
 
-    <!-- MAIN BUTTONS -->
+    <!-- ⚡ MAIN BUTTONS -->
     <section class="buttons">
       <button onclick="startWorkout()">🏋️ Start Workout</button>
       <button onclick="logMeal()">🍎 Log Meal</button>
@@ -47,26 +45,24 @@
       <button onclick="showCoach()">🧠 Coach</button>
     </section>
 
-    <!-- TIMER CARD -->
+    <!-- ⏱ TIMER -->
     <section class="card">
       <h3>⏱ Rest Timer</h3>
       <div id="timer" class="timer">00:00</div>
       <button id="timerBtn" onclick="toggleTimer()">▶️ Start</button>
     </section>
 
-    <!-- HYDRATION CARD -->
+    <!-- 💧 HYDRATION -->
     <section class="card">
       <h3>💧 Daily Hydration</h3>
       <p id="hydration">0 / 8 cups</p>
-      <div class="progress-container">
-        <div id="progress-bar"></div>
-      </div>
+      <div class="progress-container"><div id="progress-bar"></div></div>
       <p id="streak">🔥 Current Streak: 0 days</p>
       <p id="best-streak">🏅 Best Streak: 0 days</p>
       <button onclick="addCup()">Add Cup</button>
     </section>
 
-    <!-- MUSIC CARD -->
+    <!-- 🎵 MUSIC -->
     <section class="card spotify">
       <h3>🎵 Workout Music</h3>
       <p>Stay motivated — your beats are ready!</p>
@@ -87,23 +83,21 @@
       </div>
     </section>
 
-    <!-- COACH CARD -->
+    <!-- 🧠 COACH -->
     <section class="card hidden" id="coach-card">
       <h3>🧠 Coach Insights</h3>
       <p id="coach-week"></p>
       <p id="coach-level"></p>
-
       <div id="coach-progress-container">
         <div id="coach-progress-bar"></div>
       </div>
-
       <p id="coach-completion"></p>
       <p id="coach-hydration"></p>
       <p id="coach-message"></p>
       <p id="coach-next"></p>
     </section>
 
-    <!-- WORKOUT OVERLAY -->
+    <!-- 🏋️ WORKOUT OVERLAY -->
     <div id="workout-overlay" class="hidden">
       <div class="workout-header">
         <h2 id="workout-day">DAY</h2>
@@ -118,22 +112,19 @@
       <div id="quote-box" class="hidden"></div>
     </div>
 
-    <!-- CONFETTI & CONGRATS -->
+    <!-- 🎉 CONFETTI -->
     <canvas id="confetti-canvas"></canvas>
     <div id="congrats-msg">🎉 Workout Completed!</div>
 
     <footer>Built with purpose ✦ Gabe Fitness by Capstone</footer>
 
     <script>
-      // Splash hide after 3s
       window.addEventListener("load", () => {
         setTimeout(
           () => document.getElementById("splash").classList.add("hide"),
           3000
         );
       });
-
-      // Register service worker if available
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("service-worker.js").catch(() => {});
       }
