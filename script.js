@@ -1,10 +1,10 @@
-
 /* ==========================================================
-   GABE FITNESS APP – v2 (Dark default, theme toggle, Spanish splash)
+   GABE FITNESS APP – v2
+   Dark by default, hybrid training, adaptive coach
    ========================================================== */
 
 // ---------- Versioned Reset (fresh data for v2) ----------
-(function ensureV2FreshStart(){
+(function ensureV2FreshStart() {
   try {
     if (localStorage.getItem("gf_version") !== "v2") {
       const theme = localStorage.getItem("gf_theme") || "dark";
@@ -12,24 +12,26 @@
       localStorage.setItem("gf_version", "v2");
       localStorage.setItem("gf_theme", theme);
     }
-  } catch (e) { /* ignore */ }
+  } catch (e) {
+    // ignore
+  }
 })();
 
 // ---------- Theme (dark by default + toggle) ----------
-(function initTheme(){
+(function initTheme() {
   const saved = localStorage.getItem("gf_theme") || "dark";
   const body = document.body;
-  body.classList.remove("light","dark");
+  body.classList.remove("light", "dark");
   body.classList.add(saved);
   const btn = document.getElementById("themeToggle");
   if (btn) btn.textContent = saved === "dark" ? "🌙" : "☀️";
 })();
 
-document.addEventListener("click", function(e){
+document.addEventListener("click", function (e) {
   if (e.target && e.target.id === "themeToggle") {
     const body = document.body;
     const next = body.classList.contains("dark") ? "light" : "dark";
-    body.classList.remove("light","dark");
+    body.classList.remove("light", "dark");
     body.classList.add(next);
     localStorage.setItem("gf_theme", next);
     e.target.textContent = next === "dark" ? "🌙" : "☀️";
@@ -37,10 +39,12 @@ document.addEventListener("click", function(e){
 });
 
 // ---------- Global Dates & Phase ----------
-const startDate = new Date("2025-11-03"); // Monday Week 1
+const startDate = new Date("2025-11-03"); // Monday Week 1 (adjust if you want)
 const today = new Date();
 const msPerWeek = 7 * 24 * 60 * 60 * 1000;
-const weekNum = Math.floor((today - startDate) / msPerWeek) + 1;
+let weekNum = Math.floor((today - startDate) / msPerWeek) + 1;
+if (weekNum < 1) weekNum = 1;
+if (weekNum > 12) weekNum = 12;
 
 function getPhase() {
   if (weekNum <= 4) return "Foundation Phase";
@@ -54,178 +58,294 @@ const quotes = [
   "“YHWH is my strength and my shield.” – Psalm 28:7",
   "“Run with endurance the race set before you.” – Hebrews 12:1",
   "“The joy of YHWH is your strength.” – Nehemiah 8:10",
-  "“Be strong and courageous; YHWH is with you.” – Joshua 1:9"
+  "“Be strong and courageous; YHWH is with you.” – Joshua 1:9",
 ];
 
 // ---------- Weekday mapping ----------
-const weekdayPlans = { 1: "Monday", 2: "Tuesday", 3: "Wednesday", 4: "Thursday", 5: "Friday" };
+const weekdayPlans = {
+  1: "Monday",
+  2: "Tuesday",
+  3: "Wednesday",
+  4: "Thursday",
+  5: "Friday",
+};
 
-// ---------- Workout Library (12 Weeks) ----------
+// ---------- Hybrid Workout Library ----------
 const workouts = {
   foundation: {
+    // WEEKS 1–4 – Learn form, build base, moderate intensity
+
+    // Mon – Full-Body Strength (Technique + Base)
     monday: {
       warmup: [
-        "Incline Treadmill Walk – Full Body – Posture upright, light pace – 5 min",
-        "Mobility Series – Shoulders / Hips – Slow controlled circles – 5 min"
+        "Treadmill Walk – Full Body – Light pace, upright posture – 5 min",
+        "Dynamic Mobility – Hips / Shoulders – Controlled leg swings & arm circles – 5 min",
       ],
       main: [
-        "Dumbbell Squat – Legs / Glutes – Chest up, drive through heels – 3×15 reps",
-        "Dumbbell Chest Press – Chest / Triceps – Lower slowly, elbows 45° – 3×12–15 reps",
+        "Goblet Squat (DB) – Legs / Glutes – Chest up, sit between heels – 3×12 reps",
+        "Dumbbell Bench Press – Chest / Triceps – Elbows at 45°, slow lower – 3×12 reps",
         "Cable Row – Back / Biceps – Pull to lower ribs, squeeze shoulder blades – 3×12 reps",
-        "Reverse Lunge – Legs / Glutes – Step back, torso upright – 3×12 each leg",
-        "Plank Hold – Core – Straight line shoulders-to-ankles – 3×45 sec"
+        "Dumbbell Romanian Deadlift – Hamstrings / Glutes – Hinge at hips, flat back – 3×12 reps",
+        "Plank Hold – Core – Straight line shoulders-to-ankles – 3×30 sec",
       ],
       cooldown: [
-        "Walk Cool-Down – Cardio – Easy breathing – 3 min",
-        "Hip & Back Stretch – Flexibility – 30 sec per move × 5"
-      ]
+        "Walking Cool-Down – Cardio – Very easy pace – 3 min",
+        "Lower-Body Stretch – Legs / Hips – Hold each 20–30 sec – 5 min",
+      ],
     },
+
+    // Tue – Cardio + Core & Mobility
     tuesday: {
-      warmup: ["Elliptical Ride – Cardio – Easy pace – 6 min"],
+      warmup: ["Elliptical – Cardio – Easy effort, focus on breathing – 6 min"],
       main: [
-        "Run/Walk Intervals – Cardio – 1 min run / 1 min walk × 10 rounds",
-        "Stationary Bike – Cardio – Moderate pace – 15 min"
+        "Treadmill Intervals – Cardio – 1 min brisk walk / 1 min light jog × 10 rounds",
+        "Stationary Bike – Cardio – Comfortable steady pace – 10 min",
+        "Dead Bug – Core – Keep low back pressed to bench/mat – 3×12 each side",
+        "Side Plank – Core / Obliques – Hips high, body in line – 3×20 sec each side",
       ],
-      cooldown: ["Full Body Stretch – Mobility – 7 min"]
+      cooldown: [
+        "Full-Body Stretch – Mobility – Focus on hips, hamstrings, chest – 8 min",
+      ],
     },
+
+    // Wed – Lower Body Focus
     wednesday: {
-      warmup: ["Dynamic Mobility – Full Body – Controlled movements – 8 min"],
-      main: [
-        "Dumbbell Deadlift – Back / Hamstrings – Flat back, hinge hips – 3×12 reps",
-        "Cable Chest Fly – Chest – Slight bend arms, control – 3×15 reps",
-        "Step-Up DB – Legs / Glutes – Drive through heel – 3×12 per leg",
-        "Face Pull – Rear Delts / Traps – Pull to forehead, squeeze – 3×15 reps",
-        "Kettlebell Swing – Glutes / Hamstrings – Power from hips – 3×20 reps"
+      warmup: [
+        "Bike – Cardio – Easy spinning – 5 min",
+        "Hip Mobility – Hips / Glutes – Lunges with reach, hip circles – 5 min",
       ],
-      cooldown: ["Treadmill Walk – Recovery – 5 min + Stretch – 3 min"]
+      main: [
+        "Back Squat (DB at shoulders) – Legs / Glutes – Knees tracking over toes – 3×12 reps",
+        "Reverse Lunge – Legs / Glutes – Step back, tall torso – 3×10 each leg",
+        "Leg Press (or extra Goblet Squat heavier) – Legs – Controlled tempo – 3×12 reps",
+        "Glute Bridge (weighted if able) – Glutes / Hamstrings – Squeeze at top – 3×15 reps",
+        "Standing Calf Raise – Calves – Full stretch and squeeze – 3×15 reps",
+        "Hanging Knee Raise (or lying leg raise) – Core – No swinging – 3×12 reps",
+      ],
+      cooldown: [
+        "Treadmill Walk – Recovery – Easy pace – 5 min",
+        "Lower-Body Stretch – Hips / Hamstrings / Quads – 8 min",
+      ],
     },
+
+    // Thu – Full-Body Conditioning Circuit
     thursday: {
-      warmup: ["Bike + Joint Mobility – Warm-up – Loosen hips & shoulders – 6 min"],
+      warmup: ["Elliptical – Cardio – Gradually increase to moderate – 6 min"],
       main: [
-        "Cable Chest Press – Chest / Triceps – Control return – 3×12 reps",
-        "Dumbbell Row – Back / Biceps – Neutral spine – 3×12 each arm",
-        "Walking Lunge – Legs / Glutes – Long stride, balance up – 3×10 each leg",
-        "Mountain Climbers – Core / Cardio – Steady rhythm – 4×30 sec",
-        "Cable Curl – Biceps – Elbows fixed at sides – 3×12 reps",
-        "Triceps Pressdown – Triceps – Control tempo – 3×12 reps"
+        "Circuit × 3 rounds (60 sec rest after each round) – Full Body – Move smooth, focus on breathing – ~25–30 min total",
+        " • DB Squat to Press – Legs / Shoulders – Drive from legs, finish overhead – 12 reps",
+        " • Cable Row – Back / Biceps – Squeeze at end range – 12 reps",
+        " • Step-Up (bench) – Legs / Glutes – Drive through heel – 10 each leg",
+        " • Push-Up (bench if needed) – Chest / Triceps – Body straight – 10–12 reps",
+        " • Mountain Climbers – Core / Cardio – Steady pace – 30 sec",
       ],
-      cooldown: ["Foam Roll + Stretch – Recovery – 8 min"]
+      cooldown: [
+        "Gentle Bike or Walk – Cardio – Bring heart rate down – 5 min",
+        "Stretch – Chest / Back / Hips – 8 min",
+      ],
     },
+
+    // Fri – Upper Body Focus + Core
     friday: {
-      warmup: ["Treadmill Warm-up – Cardio – 5 min"],
-      main: [
-        "Sprint Intervals – Cardio – 20 s sprint / 40 s walk × 10",
-        "Elliptical Ride – Cardio – Moderate pace – 10 min",
-        "Core Circuit – Core – Plank 45 s → Crunch 15 → Leg Raises 12 × 3 rounds"
+      warmup: [
+        "Arm & Shoulder Mobility – Shoulders – Arm circles, band pull-aparts – 5 min",
+        "Row Machine or Cable Row (light) – Back – Easy warm-up pulling – 5 min",
       ],
-      cooldown: ["Yoga Flow – Mobility – 8 min"]
-    }
+      main: [
+        "Incline DB Bench Press – Upper Chest / Shoulders – Control down, strong press – 3×12 reps",
+        "One-Arm DB Row – Back / Biceps – Flat back, pull to hip – 3×12 each arm",
+        "Cable Chest Fly – Chest – Slight elbow bend, squeeze in front – 3×15 reps",
+        "Cable Lat Pulldown (or similar) – Back – Pull to chest – 3×12 reps",
+        "DB Biceps Curl – Biceps – Elbows at sides – 3×12 reps",
+        "Cable Triceps Pressdown – Triceps – Lock elbows at sides – 3×12 reps",
+        "Plank with Shoulder Tap – Core / Shoulders – Minimize hip sway – 3×20 taps",
+      ],
+      cooldown: [
+        "Upper-Body Stretch – Chest / Lats / Shoulders – 8 min",
+        "Light Breathing Drill – Recovery – Deep inhale / slow exhale – 3 min",
+      ],
+    },
   },
 
+  // BUILD PHASE (Weeks 5–8)
   build: {
+    // Mon – Full-Body Strength (Heavier)
     monday: {
-      warmup: ["Treadmill Jog – Full Body – Light jog – 8 min"],
-      main: [
-        "Front Squat (DB) – Legs / Core – Elbows up, neutral spine – 4×10 reps",
-        "Cable Row – Back / Biceps – Elbows close – 4×10 reps",
-        "Incline DB Press – Chest / Shoulders – 30–45° bench – 3×10–12 reps",
-        "Face Pull – Rear Delts / Traps – Control movement – 3×15 reps",
-        "Plank Hold – Core – Controlled breathing – 3×60 sec"
+      warmup: [
+        "Treadmill Walk/Jog – Full Body – Gradually build to light jog – 8 min",
       ],
-      cooldown: ["Stretch – Flexibility – 8 min"]
+      main: [
+        "Goblet Squat (heavier) – Legs / Glutes – Strong drive up – 4×10 reps",
+        "Flat DB Bench Press – Chest / Triceps – Add weight if form solid – 4×10 reps",
+        "Bent-Over DB Row – Back / Biceps – Neutral spine – 4×10 reps",
+        "Romanian Deadlift – Hamstrings / Glutes – Slow 3-sec lower – 3×10 reps",
+        "Plank Hold – Core – Stable breathing – 3×40 sec",
+      ],
+      cooldown: [
+        "Walk Cool-Down – Cardio – Easy pace – 5 min",
+        "Hip & Hamstring Stretch – Flexibility – 8 min",
+      ],
     },
+
+    // Tue – Cardio + Core (More structured intervals)
     tuesday: {
-      warmup: ["Elliptical Warm-up – Cardio – 8 min"],
+      warmup: ["Elliptical – Cardio – Easy to moderate – 6 min"],
       main: [
-        "Fast Run/Walk Intervals – Cardio – 75 s run / 45 s walk × 10",
-        "Stationary Bike – Cardio – Endurance pace – 20 min"
+        "Run/Walk Intervals – Cardio – 75 sec run / 45 sec walk × 10 rounds",
+        "Stationary Bike – Cardio – Steady moderate zone – 15 min",
+        "Cable Woodchop – Core / Obliques – Rotate from torso – 3×12 each side",
+        "Reverse Crunch – Core – Slow, controlled – 3×15 reps",
       ],
-      cooldown: ["Mobility Routine – 5 min"]
+      cooldown: ["Mobility Flow – Hips / Ankles / Spine – 8 min"],
     },
+
+    // Wed – Lower Body Strength Focus
     wednesday: {
-      warmup: ["Active Mobility – Full Body – 8 min"],
-      main: [
-        "Dumbbell Deadlift – Back / Hamstrings – Engage core – 4×8–10 reps",
-        "Push Press (DB) – Shoulders / Triceps – Use leg drive – 3×10 reps",
-        "Bulgarian Split Squat – Legs / Glutes – Front knee aligned – 3×10 each leg",
-        "Cable Fly – Chest – Slight bend arms – 3×12 reps",
-        "Kettlebell Swing – Glutes / Hamstrings – Explosive hips – 3×20 reps"
+      warmup: [
+        "Bike – Cardio – Easy spinning – 5 min",
+        "Dynamic Leg Swings / Lunges – Legs / Hips – 5 min",
       ],
-      cooldown: ["Stretch – Flexibility – 8 min"]
+      main: [
+        "DB Front Squat – Legs / Core – Elbows high, stable torso – 4×8–10 reps",
+        "Walking Lunge (with DBs if ready) – Legs / Glutes – 3×10 each leg",
+        "Single-Leg Romanian Deadlift – Balance / Hamstrings – 3×10 each leg",
+        "Glute Bridge March – Glutes / Core – Alternate legs, hips high – 3×12 each leg",
+        "Seated or Standing Calf Raise – Calves – 3×15 reps",
+        "Hanging Knee Raise / Leg Raise – Core – 3×12–15 reps",
+      ],
+      cooldown: [
+        "Treadmill Walk – Recovery – 5 min",
+        "Quad / Hamstring / Glute Stretch – 8 min",
+      ],
     },
+
+    // Thu – Full-Body Conditioning
     thursday: {
-      warmup: ["Bike Warm-up – 5 min + Mobility – 3 min"],
+      warmup: ["Elliptical – Cardio – Gradual build to moderate – 6 min"],
       main: [
-        "Circuit × 4 rounds: Cable Press (12) → DB Row (12/side) → Lunge (10/leg) → Bike 45 s → Curl (12) → Triceps Pressdown (12)"
+        "Circuit × 4 rounds (45–60 sec rest between rounds) – Full Body – ~30 min",
+        " • DB Squat to Press – Legs / Shoulders – 10 reps",
+        " • Push-Up – Chest / Triceps – 10–12 reps",
+        " • DB Row – Back / Biceps – 12 each arm",
+        " • Reverse Lunge – Legs / Glutes – 10 each leg",
+        " • Mountain Climbers – Core / Cardio – 30–40 sec",
       ],
-      cooldown: ["Foam Roll – Recovery – 8 min"]
+      cooldown: ["Bike or Walk – Easy – 5 min", "Full-Body Stretch – 8 min"],
     },
+
+    // Fri – Upper Body Focus + Rotational Core
     friday: {
-      warmup: ["Treadmill Warm-up – 5 min"],
-      main: [
-        "Sprint 30 s / Walk 30 s × 12",
-        "Elliptical Ride – Cardio – 8 min",
-        "Core Tri-Set – Hanging Knee Raise 12 → Pallof Press 12/side → Plank 60 s × 3"
+      warmup: [
+        "Band or Cable Warm-Up – Shoulders / Back – Light rows & external rotations – 5 min",
+        "Row Machine or Cable Row – Back – 5 min easy",
       ],
-      cooldown: ["Yoga Stretch – 10 min"]
-    }
+      main: [
+        "Incline DB Bench Press – Upper Chest / Shoulders – 4×8–10 reps",
+        "One-Arm DB Row – Back / Biceps – 4×8–10 each arm",
+        "Seated Shoulder Press (DB) – Shoulders / Triceps – 3×10 reps",
+        "Cable Chest Fly – Chest – 3×12–15 reps",
+        "DB Hammer Curl – Biceps / Forearms – 3×10–12 reps",
+        "Overhead DB Triceps Extension – Triceps – 3×10–12 reps",
+        "Russian Twist (light DB) – Core / Obliques – 3×16–20 twists",
+      ],
+      cooldown: ["Upper-Body Stretch – Chest / Shoulders / Lats – 8–10 min"],
+    },
   },
 
+  // DEFINITION PHASE (Weeks 9–12)
   definition: {
+    // Mon – Full-Body Strength + Higher Rep Tone
     monday: {
-      warmup: ["Mobility Drill – Full Body – 8 min"],
+      warmup: ["Treadmill Walk/Jog – Full Body – Build to light jog – 8 min"],
       main: [
-        "DB Squat – Legs / Glutes – Controlled descent – 3×12 reps",
-        "Cable Row – Back / Biceps – Smooth motion – 3×12 reps",
-        "DB Press – Chest / Shoulders – Keep shoulders down – 3×12 reps",
-        "Face Pull – Shoulders / Upper Back – Control both directions – 3×15 reps",
-        "Wood Chop – Core / Obliques – Rotate through torso – 3×20 reps",
-        "Plank Hold – Core – Tight abs + neutral spine – 3×45 sec"
+        "Goblet Squat – Legs / Glutes – Controlled, full depth – 3×15 reps",
+        "DB Bench Press – Chest / Triceps – Slightly faster up, slow down – 3×12–15 reps",
+        "DB Row – Back / Biceps – Strong squeeze at top – 3×12–15 reps",
+        "Romanian Deadlift – Hamstrings / Glutes – 3×12 reps",
+        "Plank with Reach – Core / Shoulders – Reach alternating arms – 3×30 sec",
       ],
-      cooldown: ["Stretch Session – 8 min"]
+      cooldown: [
+        "Walk – Easy – 5 min",
+        "Stretch – Hips / Hamstrings / Chest – 8–10 min",
+      ],
     },
+
+    // Tue – HIIT + Core
     tuesday: {
-      warmup: ["Treadmill Walk + Mobility – 8 min"],
+      warmup: ["Elliptical – Cardio – Easy to moderate – 6 min"],
       main: [
-        "Run/Walk Intervals – Cardio – 2 min run / 1 min walk × 10",
-        "Bike Ride – Cardio – 10 min steady pace"
+        "Treadmill HIIT – Cardio – 30 sec fast / 60 sec walk × 12 rounds",
+        "Stationary Bike – Cardio – Moderate steady pace – 10 min",
+        "Cable Woodchop – Core / Obliques – 3×15 each side",
+        "Plank Variations (front / side) – Core – 3×30–40 sec each",
       ],
-      cooldown: ["Mobility Flow – 8 min"]
+      cooldown: [
+        "Slow Walk – Recovery – 5 min",
+        "Mobility Flow – Spine / Hips – 8 min",
+      ],
     },
+
+    // Wed – Lower Body + Athletic Elements
     wednesday: {
-      warmup: ["Dynamic Mobility – Full Body – 8 min"],
-      main: [
-        "DB Deadlift – Back / Hamstrings – Controlled lift – 4×8 reps",
-        "Push Press (DB) – Shoulders / Arms – Power up fast – 3×10 reps",
-        "Step-Up with Knee Lift – Legs / Core – Balance at top – 3×12 each leg",
-        "Kettlebell Swing – Glutes / Hamstrings – Drive through hips – 3×20 reps",
-        "Jump Lunge – Legs / Cardio – Soft landing – 3×12 each leg"
+      warmup: [
+        "Bike – Cardio – Easy spin – 5 min",
+        "Dynamic Leg Warm-Up – Legs / Hips – Walking lunges, high knees – 5 min",
       ],
-      cooldown: ["Stretch – 8 min"]
+      main: [
+        "DB Front Squat – Legs / Core – 4×10 reps",
+        "Reverse Lunge (with DBs) – Legs / Glutes – 3×10 each leg",
+        "Kettlebell or DB Swing – Glutes / Hamstrings – Hinge, don’t squat – 3×20 reps",
+        "Step-Up with Knee Drive – Legs / Balance / Core – 3×10 each leg",
+        "Calf Raise – Calves – 3×15–20 reps",
+        "Hanging Leg Raise or Reverse Crunch – Core – 3×15 reps",
+      ],
+      cooldown: ["Walk – Easy – 5 min", "Lower-Body Stretch – 10 min"],
     },
+
+    // Thu – Full-Body Conditioning Circuit
     thursday: {
-      warmup: ["Bike + Mobility – 5 min"],
+      warmup: ["Elliptical – Cardio – Moderate – 6–8 min"],
       main: [
-        "AMRAP 20 min: Cable Press 12 → Row 12/side → Lunge 10/leg → Mountain Climbers 40 s → Pressdown 12"
+        "AMRAP 20–25 min (as many quality rounds as possible): – Full Body – Move with control, minimal rest",
+        " • DB Squat to Press – Legs / Shoulders – 10 reps",
+        " • Push-Up – Chest / Triceps – 10–12 reps",
+        " • DB Row – Back / Biceps – 12 each arm",
+        " • Walking Lunge – Legs / Glutes – 10 each leg",
+        " • Mountain Climbers or High Knees – Cardio / Core – 30–40 sec",
       ],
-      cooldown: ["Foam Roll + Stretch – 10 min"]
+      cooldown: ["Bike – Very easy – 5 min", "Stretch – Full Body – 10 min"],
     },
+
+    // Fri – Upper Body Tone + Core Finisher
     friday: {
-      warmup: ["Treadmill Walk – 5 min"],
-      main: [
-        "Sprint 20 s / Walk 40 s × 14",
-        "Elliptical Ride – 6 min recovery",
-        "Stretch Flow – 10 min"
+      warmup: [
+        "Band/Cable Warm-Up – Shoulders / Back – Light rows, pull-aparts – 5 min",
+        "Row Machine or Cable Row – Back – 5 min easy",
       ],
-      cooldown: ["Deep Breathing + Mindful Rest – 3 min"]
-    }
-  }
+      main: [
+        "Incline DB Bench – Upper Chest / Shoulders – 3×12–15 reps",
+        "One-Arm DB Row – Back / Biceps – 3×12–15 each arm",
+        "Lateral Raise – Shoulders – Soft elbow bend – 3×15 reps",
+        "Cable Chest Fly – Chest – 3×15 reps",
+        "DB Curl + Press – Biceps / Shoulders – 3×10–12 reps",
+        "Cable Triceps Pressdown – Triceps – 3×12–15 reps",
+        "Core Tri-Set × 3 rounds – Core – Minimal rest between moves",
+        " • Russian Twist – Core / Obliques – 20 twists",
+        " • Plank – Core – 40 sec",
+        " • Dead Bug – Core / Stability – 12 each side",
+      ],
+      cooldown: [
+        "Upper-Body Stretch – 10 min",
+        "Deep Breathing – Recovery – 3 min",
+      ],
+    },
+  },
 };
 
 // ---------- Overlay Handling & Rendering ----------
 function startWorkout() {
   toggleTimer(true);
-  toggleSpotify();
+  toggleSpotify(); // show music if hidden
   openWorkout();
 }
 
@@ -235,19 +355,27 @@ function openWorkout() {
   const dateEl = document.getElementById("workout-date");
   const phaseEl = document.getElementById("workout-phase");
   const list = document.getElementById("workout-list");
+
   overlay.classList.remove("hidden");
+
+  // Track that workout was opened
+  recordWorkoutOpened();
 
   const dayNum = today.getDay();
   const dayName = weekdayPlans[dayNum] || "Rest";
   const formatted = today.toLocaleDateString("en-US", {
-    weekday: "long", year: "numeric", month: "long", day: "numeric"
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 
   dayEl.textContent = dayName.toUpperCase();
-  phaseEl.textContent = getPhase();
+  phaseEl.textContent = `${getPhase()} • Week ${weekNum} of 12`;
   dateEl.textContent = formatted;
 
-  const phaseKey = weekNum <= 4 ? "foundation" : weekNum <= 8 ? "build" : "definition";
+  const phaseKey =
+    weekNum <= 4 ? "foundation" : weekNum <= 8 ? "build" : "definition";
   const dayKey = dayName.toLowerCase();
 
   list.innerHTML = "";
@@ -260,6 +388,14 @@ function openWorkout() {
   appendExerciseGroup("🔥 Warm-Up", todayPlan.warmup, list);
   appendExerciseGroup("💪 Main Workout", todayPlan.main, list);
   appendExerciseGroup("🧘 Cool-Down", todayPlan.cooldown, list);
+
+  const quoteBox = document.getElementById("quote-box");
+  if (quoteBox) {
+    quoteBox.textContent = getCoachMessageForToday();
+    quoteBox.classList.remove("hidden");
+  }
+
+  updateWorkoutProgress();
 }
 
 // Render list sections with muscle group + form + reps/time
@@ -273,28 +409,27 @@ function appendExerciseGroup(title, arr, container) {
   arr.forEach((ex) => {
     // Format: Name – Group – Description – Reps/Time
     const parts = ex.split(" – ");
-    const name = parts[0]?.trim() || "";
-    const the_group = parts[1]?.trim() || "";
-    const desc = parts[2]?.trim() || "";
-    const reps = parts[3]?.trim() || "";
+    const name = (parts[0] || "").trim();
+    const group = (parts[1] || "").trim();
+    const desc = (parts[2] || "").trim();
+    const reps = (parts[3] || "").trim();
 
     const div = document.createElement("div");
     div.className = "exercise";
 
     const nameEl = document.createElement("p");
-    nameEl.textContent = `• ${name}${the_group ? ` (${the_group})` : ""}`;
+    nameEl.textContent = `• ${name}${group ? ` (${group})` : ""}`;
     nameEl.style.fontWeight = "600";
     nameEl.style.marginBottom = "0.25rem";
+
+    div.appendChild(nameEl);
 
     if (desc) {
       const descEl = document.createElement("p");
       descEl.textContent = desc;
       descEl.style.fontSize = "0.9rem";
       descEl.style.color = "#cfd6e6";
-      div.appendChild(nameEl);
       div.appendChild(descEl);
-    } else {
-      div.appendChild(nameEl);
     }
 
     if (reps) {
@@ -321,8 +456,9 @@ function toggleExercise(el) {
 function updateWorkoutProgress() {
   const exercises = document.querySelectorAll(".exercise");
   const done = document.querySelectorAll(".exercise.completed").length;
-  const percent = Math.round((done / exercises.length) * 100);
   const bar = document.getElementById("workout-progress-bar");
+  if (!exercises.length || !bar) return;
+  const percent = Math.round((done / exercises.length) * 100);
   bar.style.width = `${percent}%`;
   if (percent === 100) celebrateWorkout();
 }
@@ -342,51 +478,66 @@ function toggleTimer(forceStart = false) {
   if (timerInterval && !forceStart) {
     clearInterval(timerInterval);
     timerInterval = null;
-    btn.textContent = "▶️ Start";
+    if (btn) btn.textContent = "▶️ Start";
   } else {
+    if (timerInterval) {
+      clearInterval(timerInterval);
+    }
     timerInterval = setInterval(() => {
       totalSeconds++;
       const m = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
       const s = String(totalSeconds % 60).padStart(2, "0");
       timerDisplay.textContent = `${m}:${s}`;
     }, 1000);
-    btn.textContent = "⏹ Stop";
+    if (btn) btn.textContent = "⏹ Stop";
   }
 }
 
 // ---------- SPOTIFY ----------
 function toggleSpotify() {
-  document.getElementById("spotify-player").classList.toggle("hidden");
+  const player = document.getElementById("spotify-player");
+  if (player) player.classList.toggle("hidden");
 }
+
 function openSpotify() {
-  window.open("https://open.spotify.com/playlist/37i9dQZF1DX70RN3TfWWJh", "_blank");
+  window.open(
+    "https://open.spotify.com/playlist/37i9dQZF1DX70RN3TfWWJh",
+    "_blank"
+  );
 }
 
 // ---------- HYDRATION ----------
 let cups = 0;
-const hydrationDisplay = document.getElementById("hydration");
-const progressBar = document.getElementById("progress-bar");
 let streak = 0;
 let bestStreak = 0;
+const hydrationDisplay = document.getElementById("hydration");
+const progressBar = document.getElementById("progress-bar");
 
 function getGradientColor(percent) {
   const red = percent < 50 ? 255 : Math.round(255 - (percent - 50) * 5.1);
   const green = percent < 50 ? Math.round(percent * 5.1) : 255;
   return `rgb(${red},${green},0)`;
 }
+
 function updateHydrationDisplay() {
+  if (!hydrationDisplay || !progressBar) return;
   hydrationDisplay.innerText = `${cups} / 8 cups`;
   const percent = (cups / 8) * 100;
   progressBar.style.width = `${percent}%`;
   progressBar.style.backgroundColor = getGradientColor(percent);
 }
+
 function updateStreakDisplay() {
-  document.getElementById("streak").innerText = `🔥 Current Streak: ${streak} days`;
-  document.getElementById("best-streak").innerText = `🏅 Best Streak: ${bestStreak} days`;
+  const s = document.getElementById("streak");
+  const b = document.getElementById("best-streak");
+  if (s) s.innerText = `🔥 Current Streak: ${streak} days`;
+  if (b) b.innerText = `🏅 Best Streak: ${bestStreak} days`;
 }
+
 function loadHydration() {
   const t = new Date().toDateString();
   const saved = JSON.parse(localStorage.getItem("hydrationData") || "null");
+
   if (saved && saved.date === t) {
     cups = saved.cups || 0;
     streak = saved.streak || 0;
@@ -397,20 +548,28 @@ function loadHydration() {
     } else {
       streak = 0;
     }
-    bestStreak = Math.max(saved ? (saved.bestStreak || 0) : 0, streak);
+    bestStreak = Math.max(saved ? saved.bestStreak || 0 : 0, streak);
     cups = 0;
   }
+
   updateHydrationDisplay();
-  localStorage.setItem("hydrationData", JSON.stringify({ date: t, cups, streak, bestStreak }));
   updateStreakDisplay();
+
+  localStorage.setItem(
+    "hydrationData",
+    JSON.stringify({ date: t, cups, streak, bestStreak })
+  );
 }
+
 function addCup() {
   if (cups < 8) {
     cups++;
     updateHydrationDisplay();
-    localStorage.setItem("hydrationData", JSON.stringify({
-      date: new Date().toDateString(), cups, streak, bestStreak
-    }));
+    const t = new Date().toDateString();
+    localStorage.setItem(
+      "hydrationData",
+      JSON.stringify({ date: t, cups, streak, bestStreak })
+    );
     if (cups === 8) celebrateHydration();
   }
 }
@@ -424,21 +583,31 @@ function logMeal() {
   localStorage.setItem("meals", JSON.stringify(list));
   alert(`✅ Meal logged: ${meal}`);
 }
+
 function showDashboard() {
   const meals = JSON.parse(localStorage.getItem("meals") || "[]");
   const data = JSON.parse(localStorage.getItem("hydrationData") || "{}");
-  alert(`📊 Daily Summary\n\n💧 Cups: ${data.cups || 0}/8\n🍽 Meals: ${meals.length}\n🔥 Streak: ${data.streak || 0} days`);
+  alert(
+    `📊 Daily Summary\n\n💧 Cups: ${data.cups || 0}/8\n🍽 Meals: ${
+      meals.length
+    }\n🔥 Streak: ${data.streak || 0} days`
+  );
 }
+
 function scrollToHydration() {
-  document.querySelector(".card:nth-of-type(2)").scrollIntoView({ behavior: "smooth" });
+  const cards = document.querySelectorAll(".card");
+  if (cards.length > 1) {
+    cards[1].scrollIntoView({ behavior: "smooth" }); // second card = hydration
+  }
 }
 
 // ---------- CELEBRATIONS (Confetti + Chime) ----------
 function celebrateHydration() {
   playChime();
   runConfetti();
-  showTemporaryMessage("🎉 ¡Meta de hidratación alcanzada!");
+  showTemporaryMessage("🎉 Hydration goal reached!");
 }
+
 function celebrateWorkout() {
   playChime();
   runConfetti();
@@ -446,23 +615,40 @@ function celebrateWorkout() {
   const quoteBox = document.getElementById("quote-box");
   const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
   const mins = Math.floor(totalSeconds / 60);
-  msg.classList.add("show");
-  quoteBox.textContent = `⏱ Workout complete in ${mins} minutes.\n${randomQuote}`;
-  quoteBox.classList.remove("hidden");
+
+  if (msg) {
+    msg.textContent = "🎉 Workout Completed!";
+    msg.classList.add("show");
+    setTimeout(() => msg.classList.remove("show"), 3000);
+  }
+
+  if (quoteBox) {
+    quoteBox.textContent = `⏱ Workout complete in ${mins} minutes.\n${randomQuote}`;
+    quoteBox.classList.remove("hidden");
+  }
+
   localStorage.setItem("lastWorkout", new Date().toDateString());
-  setTimeout(() => msg.classList.remove("show"), 3000);
+  recordWorkoutCompletion();
 }
+
 function playChime() {
-  const audio = new Audio("https://cdn.pixabay.com/download/audio/2023/02/28/audio_46d3b4a19f.mp3?filename=success-1-6297.mp3");
-  audio.play();
+  const audio = new Audio(
+    "https://cdn.pixabay.com/download/audio/2023/02/28/audio_46d3b4a19f.mp3?filename=success-1-6297.mp3"
+  );
+  audio.play().catch(() => {});
 }
+
 function runConfetti() {
   const canvas = document.getElementById("confetti-canvas");
+  if (!canvas) return;
   const ctx = canvas.getContext("2d");
   const confetti = [];
   const colors = ["#eaa92e", "#22266a", "#f5f6f7"];
 
-  function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
   resizeCanvas();
 
   for (let i = 0; i < 130; i++) {
@@ -471,7 +657,7 @@ function runConfetti() {
       y: Math.random() * canvas.height - canvas.height,
       r: Math.random() * 6 + 2,
       d: Math.random() * 0.5 + 0.5,
-      color: colors[Math.floor(Math.random() * colors.length)]
+      color: colors[Math.floor(Math.random() * colors.length)],
     });
   }
 
@@ -487,26 +673,180 @@ function runConfetti() {
     update();
     animationFrame = requestAnimationFrame(draw);
   }
+
   function update() {
     confetti.forEach((c) => {
       c.y += c.d * 5;
       if (c.y > canvas.height) c.y = -10;
     });
   }
+
   window.addEventListener("resize", resizeCanvas);
   draw();
   setTimeout(() => cancelAnimationFrame(animationFrame), 4000);
 }
+
 function showTemporaryMessage(text) {
   const msg = document.getElementById("congrats-msg");
+  if (!msg) return;
   msg.textContent = text;
   msg.classList.add("show");
   setTimeout(() => msg.classList.remove("show"), 3000);
+}
+
+// ==============================================
+// ADAPTIVE COACH – simple AI-style logic
+// ==============================================
+function getCoachStats() {
+  const hydration = JSON.parse(localStorage.getItem("hydrationData") || "null");
+  const stats = JSON.parse(localStorage.getItem("gf_stats") || "null");
+
+  return {
+    hydrationToday: hydration ? hydration.cups || 0 : 0,
+    streak: hydration ? hydration.streak || 0 : 0,
+    completedWorkouts: stats ? stats.completedWorkouts || 0 : 0,
+    totalWorkoutsOpened: stats ? stats.totalWorkoutsOpened || 0 : 0,
+    lastWorkoutDate: stats ? stats.lastWorkoutDate || null : null,
+  };
+}
+
+function recordWorkoutOpened() {
+  const stats = JSON.parse(localStorage.getItem("gf_stats") || "{}");
+  stats.totalWorkoutsOpened = (stats.totalWorkoutsOpened || 0) + 1;
+  localStorage.setItem("gf_stats", JSON.stringify(stats));
+}
+
+function recordWorkoutCompletion() {
+  const stats = JSON.parse(localStorage.getItem("gf_stats") || "{}");
+  stats.completedWorkouts = (stats.completedWorkouts || 0) + 1;
+  stats.lastWorkoutDate = new Date().toDateString();
+  localStorage.setItem("gf_stats", JSON.stringify(stats));
+}
+
+function getCoachLevel() {
+  const s = getCoachStats();
+
+  const completionRate = s.totalWorkoutsOpened
+    ? s.completedWorkouts / s.totalWorkoutsOpened
+    : 0;
+
+  if (completionRate < 0.4 || s.hydrationToday < 4) {
+    return "rebuilding";
+  } else if (completionRate < 0.75 || s.streak < 3) {
+    return "balanced";
+  } else {
+    return "pushing";
+  }
+}
+
+function getCoachMessageForToday() {
+  const level = getCoachLevel();
+  const s = getCoachStats();
+
+  if (level === "rebuilding") {
+    return "Coach: Hoy vamos suave pero constantes. Termina el entrenamiento con buena técnica y apunta a beber al menos 6–8 vasos de agua. 💧💪";
+  }
+
+  if (level === "balanced") {
+    return `Coach: Vas bien. Streak de ${s.streak} días, ahora concéntrate en terminar todas las series de hoy con buena forma. Si te ves fuerte, sube un poco el peso. 🔥`;
+  }
+
+  return `Coach: Estás en modo avance. Con una racha de ${s.streak} días, hoy puedes empujar el ritmo o el peso un poquito más, pero sin sacrificar la técnica. 🏆`;
+}
+
+function getCoachNextWeekAdvice() {
+  const level = getCoachLevel();
+  const s = getCoachStats();
+
+  const completionRate = s.totalWorkoutsOpened
+    ? s.completedWorkouts / s.totalWorkoutsOpened
+    : 0;
+
+  const currentWeek = weekNum;
+  const isDeloadWeek = currentWeek % 4 === 0; // 4, 8, 12...
+
+  if (level === "rebuilding") {
+    return "Next week focus: Aim for 3 finished workouts and at least 6 cups of water per day. Keep the same weights and just build consistency. 🧱";
+  }
+
+  if (level === "balanced") {
+    if (isDeloadWeek) {
+      return "Next week focus: Deload. Keep the same weights but drop 1 set on the hardest exercises and prioritize good sleep and stretching. 😌";
+    }
+    return "Next week focus: Try to finish 4+ workouts and, if all sets feel solid, increase weight slightly (about 2–5 lbs) on 1–2 key lifts. 📈";
+  }
+
+  if (isDeloadWeek) {
+    return "Next week focus: You’ve been pushing hard. Take a deload week—reduce volume by about 25% but keep intensity and technique sharp. This keeps you strong long-term. 🧠💪";
+  }
+
+  return "Next week focus: You’re ready to push. Keep hydration high, maintain your streak, and either add a bit of weight or shorten rest by 10–15 seconds on your main lifts. 🔥";
+}
+
+function showCoach() {
+  const card = document.getElementById("coach-card");
+  if (!card) return;
+
+  const stats = getCoachStats();
+  const level = getCoachLevel();
+
+  let levelLabel;
+  if (level === "rebuilding") {
+    levelLabel = "Rebuilding (getting back on track)";
+  } else if (level === "balanced") {
+    levelLabel = "Balanced (steady progress)";
+  } else {
+    levelLabel = "Pushing (high consistency)";
+  }
+
+  const completionRate = stats.totalWorkoutsOpened
+    ? Math.round((stats.completedWorkouts / stats.totalWorkoutsOpened) * 100)
+    : 0;
+
+  const weekEl = document.getElementById("coach-week");
+  if (weekEl) {
+    weekEl.textContent = `Week: ${weekNum} of 12 • ${getPhase()}`;
+  }
+
+  const levelEl = document.getElementById("coach-level");
+  if (levelEl) {
+    levelEl.textContent = `Current mode: ${levelLabel}`;
+  }
+
+  const completionEl = document.getElementById("coach-completion");
+  if (completionEl) {
+    completionEl.textContent = `Workout completion: ${completionRate}% (${
+      stats.completedWorkouts
+    }/${stats.totalWorkoutsOpened || 0} opened)`;
+  }
+
+  const hydrationEl = document.getElementById("coach-hydration");
+  if (hydrationEl) {
+    hydrationEl.textContent = `Hydration today: ${stats.hydrationToday}/8 cups • Streak: ${stats.streak} days`;
+  }
+
+  const messageEl = document.getElementById("coach-message");
+  if (messageEl) {
+    messageEl.textContent = getCoachMessageForToday();
+  }
+
+  const nextEl = document.getElementById("coach-next");
+  if (nextEl) {
+    nextEl.textContent = getCoachNextWeekAdvice();
+  }
+
+  const bar = document.getElementById("coach-progress-bar");
+  if (bar) {
+    bar.style.width = `${completionRate}%`;
+  }
+
+  card.classList.remove("hidden");
+  card.scrollIntoView({ behavior: "smooth" });
 }
 
 // ---------- INIT ----------
 window.onload = () => {
   loadHydration();
   updateWorkoutProgress();
-  console.log("✅ Gabe Fitness v2 loaded (dark default)");
+  console.log("✅ Gabe Fitness v2 loaded (dark default, hybrid + coach)");
 };

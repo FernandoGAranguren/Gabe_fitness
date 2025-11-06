@@ -1,4 +1,3 @@
-
 :root {
   --primary: #22266a;
   --accent: #eaa92e;
@@ -6,14 +5,16 @@
   --text: #f5f6f7;
   --card-bg: #1a1d27;
   --muted: #9aa3b2;
-  --font: 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font: "Segoe UI", Helvetica, Arial, sans-serif;
 }
+
 body.light {
   --bg: #f5f6f7;
   --text: #22266a;
   --card-bg: #ffffff;
   --muted: #677085;
 }
+
 body.dark {
   --bg: #0f1116;
   --text: #f5f6f7;
@@ -21,9 +22,15 @@ body.dark {
   --muted: #9aa3b2;
 }
 
-/* Base */
-* { box-sizing: border-box; }
-html, body { height: 100%; }
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
 body {
   margin: 0;
   font-family: var(--font);
@@ -35,6 +42,10 @@ body {
   text-align: center;
   padding: 1.2rem 1rem 2rem;
   transition: background 0.3s ease, color 0.3s ease;
+}
+
+.hidden {
+  display: none !important;
 }
 
 /* Splash */
@@ -50,41 +61,106 @@ body {
   z-index: 100000;
   transition: opacity 1s ease, visibility 1s ease;
 }
-#splash.hide { opacity: 0; visibility: hidden; }
-.splash-icon {
-  width: 96px; height: 96px;
-  animation: pulse 1.6s ease-in-out infinite;
-  filter: drop-shadow(0 0 16px rgba(234,169,46,0.35));
+
+#splash.hide {
+  opacity: 0;
+  visibility: hidden;
 }
-.splash-title { margin: 0.8rem 0 0.3rem; font-size: 1.15rem; opacity: 0.98; }
+
+.splash-icon {
+  width: 96px;
+  height: 96px;
+  animation: pulse 1.6s ease-in-out infinite;
+  filter: drop-shadow(0 0 16px rgba(234, 169, 46, 0.35));
+}
+
+.splash-title {
+  margin: 0.8rem 0 0.3rem;
+  font-size: 1.15rem;
+  opacity: 0.98;
+}
+
 .splash-verse {
   margin: 0.2rem 0 0.4rem;
   font-size: 0.98rem;
-  text-shadow: 0 0 6px rgba(234,169,46,0.55), 0 0 18px rgba(234,169,46,0.35);
+  text-shadow: 0 0 6px rgba(234, 169, 46, 0.55),
+    0 0 18px rgba(234, 169, 46, 0.35);
 }
-.splash-loading { opacity: 0; animation: fadeIn 3s ease forwards; }
-@keyframes fadeIn { to { opacity: 1; } }
+
+.splash-loading {
+  opacity: 0;
+  animation: fadeIn 3s ease forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.06); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* Header */
 .app-header {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  width: 100%; max-width: 980px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  max-width: 980px;
   margin: 0.5rem 0 1rem;
 }
-.brand-left { display: flex; align-items: center; gap: 12px; }
-.brand-icon { width: 56px; height: 56px; border-radius: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-.brand-text h1 { margin: 0; font-size: clamp(1.2rem, 3.2vw, 1.8rem); font-weight: 800; }
-.tagline { margin: 2px 0 0; font-size: 0.9rem; color: var(--muted); }
-.icon-btn {
-  background: transparent; color: var(--text); border: 2px solid var(--text);
-  border-radius: 12px; padding: 0.5rem 0.7rem; cursor: pointer; transition: 0.25s;
+
+.brand-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
-.icon-btn:hover { background: var(--accent); color: #22266a; border-color: transparent; }
+
+.brand-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.brand-text h1 {
+  margin: 0;
+  font-size: clamp(1.2rem, 3.2vw, 1.8rem);
+  font-weight: 800;
+}
+
+.tagline {
+  margin: 2px 0 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.icon-btn {
+  background: transparent;
+  color: var(--text);
+  border: 2px solid var(--text);
+  border-radius: 12px;
+  padding: 0.5rem 0.7rem;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.icon-btn:hover {
+  background: var(--accent);
+  color: #22266a;
+  border-color: transparent;
+}
 
 /* Buttons grid */
 .buttons {
@@ -92,10 +168,16 @@ body {
   grid-template-columns: repeat(2, minmax(140px, 1fr));
   gap: 0.8rem;
   width: 100%;
-  max-width: 560px;
+  max-width: 640px;
   margin: 0.4rem 0 1.2rem;
 }
-@media (min-width: 620px) { .buttons { grid-template-columns: repeat(4, 1fr); } }
+
+@media (min-width: 720px) {
+  .buttons {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
 button {
   background: var(--primary);
   color: white;
@@ -106,30 +188,42 @@ button {
   cursor: pointer;
   transition: 0.25s;
 }
-button:hover { background: var(--accent); color: #22266a; transform: translateY(-1px); }
+
+button:hover {
+  background: var(--accent);
+  color: #22266a;
+  transform: translateY(-1px);
+}
 
 /* Cards */
 .card {
   background: var(--card-bg);
   border-radius: 16px;
   padding: 1.2rem;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.18);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.18);
   width: 100%;
   max-width: 520px;
   margin-bottom: 1rem;
 }
-.timer { font-size: 2.2rem; color: var(--accent); font-weight: 800; margin: 0.6rem 0; }
+
+.timer {
+  font-size: 2.2rem;
+  color: var(--accent);
+  font-weight: 800;
+  margin: 0.6rem 0;
+}
 
 /* Hydration Bar */
 .progress-container {
   width: 100%;
-  background: rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 10px;
   height: 12px;
   overflow: hidden;
   margin: 10px 0;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
 }
+
 #progress-bar {
   height: 100%;
   width: 0%;
@@ -137,7 +231,34 @@ button:hover { background: var(--accent); color: #22266a; transform: translateY(
   transition: width 0.4s ease, background-color 0.8s ease;
 }
 
-/* Overlay */
+/* Coach progress bar */
+#coach-progress-container {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  height: 10px;
+  margin: 0.4rem 0 0.6rem;
+  overflow: hidden;
+}
+
+#coach-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  transition: width 0.4s ease;
+}
+
+#coach-card p {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+}
+
+#coach-message {
+  margin-top: 0.6rem;
+  font-weight: 600;
+}
+
+/* Workout overlay */
 #workout-overlay {
   position: fixed;
   inset: 0;
@@ -149,7 +270,11 @@ button:hover { background: var(--accent); color: #22266a; transform: translateY(
   align-items: center;
   padding: 1.2rem 1rem 2rem;
 }
-#workout-overlay.hidden { display: none; }
+
+#workout-overlay.hidden {
+  display: none;
+}
+
 .workout-header {
   text-align: center;
   position: sticky;
@@ -159,6 +284,7 @@ button:hover { background: var(--accent); color: #22266a; transform: translateY(
   border-bottom: 3px solid var(--accent);
   width: 100%;
 }
+
 .close-btn {
   position: absolute;
   right: 12px;
@@ -169,12 +295,14 @@ button:hover { background: var(--accent); color: #22266a; transform: translateY(
   border-radius: 8px;
   font-weight: 800;
 }
+
 .workout-body {
   width: 100%;
   max-width: 560px;
   margin-top: 1.1rem;
   text-align: left;
 }
+
 .exercise {
   background: var(--card-bg);
   border-radius: 12px;
@@ -182,18 +310,32 @@ button:hover { background: var(--accent); color: #22266a; transform: translateY(
   margin-bottom: 0.8rem;
   cursor: pointer;
   transition: 0.3s;
-  border: 1px solid rgba(255,255,255,0.06);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
-.exercise:hover { background: rgba(234,169,46,0.12); }
-.exercise.completed { background: rgba(255,255,255,0.08); color: var(--muted); text-decoration: line-through; }
-.exercise.completed::after { content: "✅"; float: right; }
+
+.exercise:hover {
+  background: rgba(234, 169, 46, 0.12);
+}
+
+.exercise.completed {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.exercise.completed::after {
+  content: "✅";
+  float: right;
+}
+
 .progress-bar-container {
   width: 86%;
-  background: rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 10px;
   height: 10px;
   margin: 10px auto 0;
 }
+
 #workout-progress-bar {
   height: 100%;
   width: 0%;
@@ -201,7 +343,7 @@ button:hover { background: var(--accent); color: #22266a; transform: translateY(
   transition: width 0.4s ease;
 }
 
-/* Quote box */
+/* Quote box under workout */
 #quote-box {
   background: var(--accent);
   color: #22266a;
@@ -216,22 +358,55 @@ button:hover { background: var(--accent); color: #22266a; transform: translateY(
 }
 
 /* Confetti & Congrats */
-#confetti-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 10000; }
-#congrats-msg {
-  position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%);
-  background: var(--card-bg); color: var(--text);
-  font-weight: 800; font-size: 1.1rem; padding: 0.9rem 1.4rem;
-  border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  opacity: 0; z-index: 10001; transition: opacity 0.6s ease;
+#confetti-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10000;
 }
-#congrats-msg.show { opacity: 1; }
 
-footer { margin-top: auto; font-size: 0.9rem; color: var(--muted); padding: 1.1rem 0; }
+#congrats-msg {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--card-bg);
+  color: var(--text);
+  font-weight: 800;
+  font-size: 1.1rem;
+  padding: 0.9rem 1.4rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  z-index: 10001;
+  transition: opacity 0.6s ease;
+}
 
-/* Mobile */
+#congrats-msg.show {
+  opacity: 1;
+}
+
+/* Footer */
+footer {
+  margin-top: auto;
+  font-size: 0.9rem;
+  color: var(--muted);
+  padding: 1.1rem 0;
+}
+
+/* Mobile tweaks */
 @media (max-width: 420px) {
-  .brand-icon { width: 48px; height: 48px; }
-  .buttons { grid-template-columns: 1fr 1fr; }
-  .card { max-width: 94vw; }
-  .workout-body { max-width: 94vw; }
+  .brand-icon {
+    width: 48px;
+    height: 48px;
+  }
+  .buttons {
+    grid-template-columns: 1fr 1fr;
+  }
+  .card {
+    max-width: 94vw;
+  }
+  .workout-body {
+    max-width: 94vw;
+  }
 }
